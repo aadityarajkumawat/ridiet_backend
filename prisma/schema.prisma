@@ -1,0 +1,70 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+enum Gender {
+    Male
+    Female
+    Other
+}
+
+model User {
+    userId    String     @id
+    name      String
+    email     String     @unique
+    password  String
+    mobile    String     @unique
+    age       Int
+    gender    Gender     @default(Male)
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @default(now())
+    Allergy   Allergy[]
+    Diseases  Diseases[]
+    Diet      Diet[]
+}
+
+model DiseasesCollection {
+    diseasesId String @id
+    name       String
+    type       String
+}
+
+model AllergyCollection {
+    allergyId String @id
+    name      String
+    type      String
+}
+
+model DietCollection {
+    dietId String @id
+    name   String
+}
+
+model Diseases {
+    diseaseId String
+    user      User   @relation(fields: [diseaseId], references: [userId], onDelete: Cascade)
+    userId    String
+
+    @@unique([diseaseId, userId])
+}
+
+model Allergy {
+    allergyId String
+    user      User   @relation(fields: [allergyId], references: [userId], onDelete: Cascade)
+    userId    String
+
+    @@unique([allergyId, userId])
+}
+
+model Diet {
+    dietId String
+    user   User   @relation(fields: [dietId], references: [userId], onDelete: Cascade)
+    userId String
+
+    @@unique([dietId, userId])
+}
