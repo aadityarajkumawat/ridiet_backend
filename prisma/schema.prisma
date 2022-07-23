@@ -29,9 +29,9 @@ model User {
 }
 
 model DiseasesCollection {
-    diseasesId String @id
+    diseasesId String   @id
     name       String
-    type       String
+    types      String[]
 }
 
 model AllergyCollection {
@@ -47,8 +47,9 @@ model DietCollection {
 
 model Diseases {
     diseaseId String
-    user      User   @relation(fields: [diseaseId], references: [userId], onDelete: Cascade)
+    user      User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
     userId    String
+    types     String[]
 
     @@unique([diseaseId, userId])
 }
@@ -63,7 +64,7 @@ model Allergy {
 
 model Diet {
     dietId String
-    user   User   @relation(fields: [dietId], references: [userId], onDelete: Cascade)
+    user   User   @relation(fields: [userId], references: [userId], onDelete: Cascade)
     userId String
 
     @@unique([dietId, userId])

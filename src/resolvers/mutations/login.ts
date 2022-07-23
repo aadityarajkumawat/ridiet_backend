@@ -1,5 +1,6 @@
 import { ResolverContext } from '../../typings';
 import { LoginInput, UserResponse } from '../resolvertypes';
+import argon2 from 'argon2';
 
 export async function login(
     _: any,
@@ -7,9 +8,20 @@ export async function login(
     { request, prisma }: ResolverContext
 ): Promise<UserResponse> {
     try {
-        const user = await prisma.user.findFirst({ where: { ...args } });
-        if (!user) return { error: 'User does not exist', user: null };
-        request.session.userId = user.id;
+        const user = await prisma.user.findFirst({
+            where: { email: args.email },
+        });
+        if (!user) throw new Error('user-not-found');
+
+        const passwordIsValid = await argon2.verify(
+            user.password,
+            args.password
+        );
+
+        if (!passwordIsValid)
+            return { error: 'Email or Password is incorrect', user: null };
+
+        request.session.userId = user.userId;
         return { error: null, user };
     } catch (error) {
         console.log(error.message);

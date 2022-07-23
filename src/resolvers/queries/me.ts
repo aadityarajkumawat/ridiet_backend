@@ -6,15 +6,17 @@ export async function me(
     __: any,
     { prisma, request }: ResolverContext
 ): Promise<UserResponse> {
-    // console.log({ prisma, request });
-    // return { error: 'ee', user: { id: 1, name: 'aditya', username: 'aditya' } };
     if (!request.session.userId) {
         return { error: 'User not authenticated', user: null };
     }
     try {
         const user = await prisma.user.findFirst({
-            where: { id: request.session.userId },
+            where: { userId: request.session.userId },
         });
+
+        if (!user) return { error: 'User not found', user };
+
+        console.log('hit', user);
         return { error: null, user };
     } catch (error) {
         console.log(error.message);

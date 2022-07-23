@@ -6,6 +6,18 @@ import { ResolversI } from './resolvers';
 import Resolvers from './resolvers';
 import { PrismaClient } from '@prisma/client';
 import { contextBuilder } from './helpers/contextBuilder';
+import { authMiddleware } from './middlewares/authMiddleware';
+
+const permissions = {
+    Query: {
+        me: authMiddleware,
+        onBoarded: authMiddleware,
+        getMyDiseases: authMiddleware,
+    },
+    Mutation: {
+        onBoard: authMiddleware,
+    },
+};
 
 async function main() {
     const typeDefs = path.join(__dirname, 'graphql/typeDefs.graphql');
@@ -16,6 +28,7 @@ async function main() {
         resolvers: resolvers as any,
         context: (options) =>
             contextBuilder.build(options, { prisma: new PrismaClient() }),
+        middlewares: [permissions],
     });
 
     server.express.use(sessionMiddleware(process.env.COOKIE_SECRET));

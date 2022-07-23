@@ -7,7 +7,7 @@ export type PrismaContext = PrismaClient<
 >;
 
 export type ResolverContext = {
-    request: Express.Request & { session: { userId: number } };
+    request: Express.Request & { session: { userId: string } };
     response: Express.Response;
     prisma: PrismaContext;
 };

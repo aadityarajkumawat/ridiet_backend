@@ -1,7 +1,10 @@
+import { getDiseases } from './getDiseases';
+import { getMyDiseases } from './getMyDiseases';
 import { me } from './me';
+import { onBoarded } from './onBoarded';
 
-export default { me };
+const resolvers = { me, getDiseases, getMyDiseases, onBoarded };
 
-export interface Queries {
-    me: typeof me;
-}
+export type Queries = typeof resolvers;
+
+export default resolvers;
