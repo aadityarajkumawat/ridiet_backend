@@ -4,7 +4,7 @@ import redis from 'redis';
 import { $10_YEARS, COOKIE_NAME, __prod__ } from '../constants';
 
 const RedisStore = connectRedis(session);
-const redisClient = redis.createClient({ port: 6379, host: 'localhost' });
+const redisClient = redis.createClient({ port: 6379, host: 'redisdb' });
 
 const sessionStore = new RedisStore({
     client: redisClient,
