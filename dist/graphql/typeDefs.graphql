@@ -1,0 +1,73 @@
+type Error {
+    field: String!
+    error: String!
+}
+
+type User {
+    userId: ID!
+}
+
+type UserResponse {
+    user: User
+    error: String
+}
+
+type UserResponse1 {
+    user: User
+    error: String
+}
+
+type DiseasesResponse {
+    diseasesId: String!
+    name: String!
+    types: [String]!
+}
+
+type MyDiseasesResponse {
+    diseaseId: String!
+    name: String!
+    types: [String]!
+}
+
+type GetDiseasesResponse {
+    data: [DiseasesResponse]!
+    error: String
+}
+
+type GetMyDiseasesResponse {
+    data: [MyDiseasesResponse]!
+    error: String
+}
+
+type Query {
+    me: UserResponse1!
+    getDiseases: GetDiseasesResponse!
+    getMyDiseases: GetMyDiseasesResponse!
+    onBoarded: Boolean!
+}
+
+type MutationResponse {
+    success: Boolean!
+    error: String
+}
+
+input DiseaseInput {
+    diseasesId: String!
+    name: String!
+    selectedTypes: [String!]
+}
+
+type Mutation {
+    login(email: String!, password: String!): UserResponse!
+    register(
+        name: String!
+        email: String!
+        password: String!
+        mobile: String!
+        age: Int!
+        gender: String!
+    ): UserResponse!
+    addDiseases(name: String!, types: [String!]!): MutationResponse!
+    logout: Boolean!
+    onBoard(diseases: [DiseaseInput]!, diet: String!): MutationResponse!
+}
